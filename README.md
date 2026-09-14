@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Blockchain Colombo
 
-## Getting Started
+The Next.js + shadcn/ui rebuild of the Blockchain Colombo site — a single-page, scroll-driven marketing site for Sri Lanka's blockchain industry network.
 
-First, run the development server:
+For the full background on this project (what it replaced, why it's structured the way it is, and the migration notes from the original WordPress site), see [`PROJECT-README.md`](./PROJECT-README.md).
+
+## Tech stack
+
+- **Next.js 16** (App Router, Turbopack)
+- **Tailwind CSS v4** + **shadcn/ui**
+- **Framer Motion** for all scroll-driven and entrance animations
+- **Lenis** for smooth scrolling
+- **React Hook Form** + **Zod** for the contact forms
+- Fonts: Google Sans (body/headings) and Great Vibes (special/script moments only) — loaded via a `<link>` tag in `app/layout.tsx`
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build   # production build
+npm run lint    # eslint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project structure
 
-## Learn More
+```
+app/
+├── page.tsx              # the single page — every section lives here
+├── layout.tsx             # fonts, SiteBackground, PointerTracker, IntroLoader
+├── globals.css            # design tokens (colors, fonts) — all in @theme
+├── api/                    # contact + newsletter form submission routes
+├── sitemap.ts, robots.ts, icon.tsx
+└── who-we-are/, blog/, etc.  # thin redirect stubs → /#section, for old bookmarked URLs
 
-To learn more about Next.js, take a look at the following resources:
+components/
+├── hero-sequence.tsx       # the pinned scroll intro (video → artwork → headings → docked nav)
+├── site-background.tsx     # the permanent midnight-blue particle backdrop
+├── particle-field.tsx       # the reusable particle canvas (used by the above, and layered on top of several section images)
+├── pointer-tracker.tsx      # tracks cursor position for the particle "dent" effect
+├── site-footer.tsx
+├── page-sections/            # one file per nav section (who-we-are, our-members, etc.)
+├── sections/                 # smaller pieces shared within/across page-sections
+├── forms/                    # the three contact/newsletter forms
+├── motion/                   # shared framer-motion variants (reveal.tsx, parallax.tsx)
+└── ui/                        # shadcn/ui primitives — CLI-generated, not hand-edited
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+lib/
+├── nav.ts        # the main nav — single source of truth for the 8 sections
+├── pointer.ts    # shared cursor-position singleton
+├── scroll-stagger.ts
+└── utils.ts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+public/images/    # every section's real image/video assets, one folder per section
+legacy-site/       # the old WordPress site being migrated away from (gitignored)
+```
 
-## Deploy on Vercel
+## Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The site is a **single page** — every nav item (`lib/nav.ts`) is an in-page anchor (`#section-id`), not a route. Old per-page routes still exist as redirect stubs so bookmarked links don't 404.
+- The contact and newsletter API routes (`app/api/`) validate and log submissions but aren't wired to a real email/CRM provider yet — see the `TODO` in each route.
+- `legacy-site/` is the original WordPress install, kept on disk for reference and excluded from git.

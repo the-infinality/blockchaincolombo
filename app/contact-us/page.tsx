@@ -1,0 +1,7 @@
+import { redirect } from "next/navigation";
+
+// The site is now a single page (app/page.tsx) — this route only exists so
+// old bookmarks/external links to /contact-us still land in the right place.
+export default function ContactUsRedirect() {
+  redirect("/#contact-us");
+}

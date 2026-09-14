@@ -36,6 +36,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# the old WordPress site this project is being migrated from — kept on disk
+# for reference, not part of the Next.js codebase's git history
+/legacy-site
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
