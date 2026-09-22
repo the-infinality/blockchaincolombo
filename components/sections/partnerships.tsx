@@ -1,55 +1,42 @@
-"use client";
+import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal";
 
-import Image from "next/image";
-import { motion } from "framer-motion";
-
-import { revealTransition, revealViewport } from "@/components/motion/reveal";
-
-// The text floats gently over the artwork — a slow, continuous bob rather
-// than a one-shot scroll reveal — to read as "hovering" in front of the
-// handshake image rather than sitting flat on it.
-const float = {
-  animate: { y: [0, -14, 0] },
-  transition: { duration: 6, repeat: Infinity, ease: "easeInOut" as const },
-};
-
+// Standalone card on the site's plain background — no photo. A subtle
+// blurred accent glow stands in for visual interest instead. Content
+// wrapper widened (max-w-6xl) so the heading isn't cramped; the paragraph
+// keeps its own tighter max-w-3xl so lines stay readable even though the
+// section itself is wide.
 export function Partnerships() {
   return (
-    <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden text-white">
-      <Image src="/images/home/p3.png" alt="" fill className="object-cover" />
-      <div className="absolute inset-0 bg-[#050b1c]/55" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#050b1c]/90 via-transparent to-[#050b1c]/50" />
-
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={revealViewport}
-        transition={revealTransition}
-        className="relative mx-auto max-w-3xl px-4 py-24 text-center sm:px-6 lg:px-8"
+    <section className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-32 lg:px-8">
+      <Reveal
+        direction="left"
+        className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-8 sm:p-14"
       >
-        <motion.h2
-          animate={float.animate}
-          transition={float.transition}
-          className="font-script text-6xl sm:text-8xl"
-        >
-          International
-          <br />
-          Partnerships
-        </motion.h2>
-        <motion.p
-          animate={{ y: [0, -9, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-          className="mx-auto mt-8 max-w-xl text-white/85"
-        >
-          Blockchain Colombo recognises that relationships matter, that the
-          strength of the networks built across borders aid both local and
-          international ecosystems alike. For that reason, we prioritise the
-          development of strong ties with jurisdictions that seek to foster
-          collaboration. Our efforts are focused on developing strong regional
-          and APAC partnerships and initiatives first and then expand
-          internationally.
-        </motion.p>
-      </motion.div>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-accent/10 blur-3xl"
+        />
+
+        <RevealGroup className="relative mx-auto max-w-6xl">
+          <RevealItem direction="left">
+            <span className="block h-px w-16 bg-accent" />
+            <h2 className="mt-6 font-heading text-4xl font-bold sm:text-6xl">
+              International Partnerships
+            </h2>
+          </RevealItem>
+          <RevealItem direction="left">
+            <p className="mt-6 max-w-3xl text-muted-foreground">
+              Blockchain Colombo recognises that relationships matter, that the
+              strength of the networks built across borders aid both local and
+              international ecosystems alike. For that reason, we prioritise the
+              development of strong ties with jurisdictions that seek to foster
+              collaboration. Our efforts are focused on developing strong regional
+              and APAC partnerships and initiatives first and then expand
+              internationally.
+            </p>
+          </RevealItem>
+        </RevealGroup>
+      </Reveal>
     </section>
   );
 }

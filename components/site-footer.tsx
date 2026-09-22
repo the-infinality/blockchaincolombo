@@ -11,6 +11,7 @@ import {
 } from "@/components/icons";
 import { NewsletterForm } from "@/components/forms/newsletter-form";
 import { Button } from "@/components/ui/button";
+import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal";
 import { mainNav } from "@/lib/nav";
 
 const contact = {
@@ -37,9 +38,20 @@ export function SiteFooter() {
       {/* Faint top glow line for a bit of drama at the seam */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
 
-      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="grid gap-14 lg:grid-cols-[1.3fr_1fr_1fr_1.3fr]">
-          <div className="space-y-5">
+      {/* Quiet watermark texture, not a focal image — low opacity, tucked
+          in the corner, sized well below the footer's own content. */}
+      <Image
+        src="/images/home/p1.png"
+        alt=""
+        aria-hidden="true"
+        width={420}
+        height={420}
+        className="pointer-events-none absolute -right-16 -bottom-16 w-64 opacity-[0.12] select-none sm:w-80"
+      />
+
+      <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <RevealGroup className="grid gap-14 lg:grid-cols-[1.3fr_1fr_1fr_1.3fr]">
+          <RevealItem className="space-y-5">
             <div className="flex items-center gap-3">
               <Image src="/logo.svg" alt="Blockchain Colombo" width={40} height={40} />
               <span className="font-heading text-xl font-semibold">Blockchain Colombo</span>
@@ -61,9 +73,9 @@ export function SiteFooter() {
                 </a>
               ))}
             </div>
-          </div>
+          </RevealItem>
 
-          <div>
+          <RevealItem>
             <h3 className="font-heading text-sm font-semibold uppercase tracking-widest text-white/50">
               Navigate
             </h3>
@@ -79,9 +91,9 @@ export function SiteFooter() {
                 </li>
               ))}
             </ul>
-          </div>
+          </RevealItem>
 
-          <div>
+          <RevealItem>
             <h3 className="font-heading text-sm font-semibold uppercase tracking-widest text-white/50">
               Get in touch
             </h3>
@@ -102,19 +114,19 @@ export function SiteFooter() {
                 </a>
               </div>
             </div>
-          </div>
+          </RevealItem>
 
-          <div>
+          <RevealItem>
             <h3 className="font-heading text-sm font-semibold uppercase tracking-widest text-white/50">
               Stay in the loop
             </h3>
             <div className="mt-5">
               <NewsletterForm />
             </div>
-          </div>
-        </div>
+          </RevealItem>
+        </RevealGroup>
 
-        <div className="mt-16 flex flex-col items-center gap-4 border-t border-white/10 pt-8 sm:flex-row sm:justify-between">
+        <Reveal className="mt-16 flex flex-col items-center gap-4 border-t border-white/10 pt-8 sm:flex-row sm:justify-between">
           <p className="text-sm text-white/40">
             © {new Date().getFullYear()} Blockchain Colombo. All rights reserved.
           </p>
@@ -127,7 +139,7 @@ export function SiteFooter() {
           >
             <ArrowUp className="size-4" />
           </Button>
-        </div>
+        </Reveal>
       </div>
     </footer>
   );

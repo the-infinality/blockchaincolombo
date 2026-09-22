@@ -7,14 +7,11 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  /* Two fonts, site-wide. Google Sans = normal text and all regular
-     headings, Great Vibes = special/script moments only. --font-heading
-     used to be Playfair Display (dropped) — it's Google Sans now too,
-     so every existing `font-heading` usage just reads as normal text. */
-  --font-sans: "Google Sans", "Segoe UI", system-ui, sans-serif;
-  --font-heading: "Google Sans", "Segoe UI", system-ui, sans-serif;
-  --font-script: "Great Vibes", cursive;
-  --font-display: "Great Vibes", cursive; /* alias — no 3rd/4th font */
+  /* One font, site-wide: General Sans for both headings and body — a
+     clean geometric sans matching consensys.io's visual character. No
+     script/display face anymore. */
+  --font-sans: "General Sans", "Segoe UI", system-ui, sans-serif;
+  --font-heading: "General Sans", "Segoe UI", system-ui, sans-serif;
   --color-facebook: #65a2b4;
   --color-instagram: #d24259;
   --color-twitter: #1da1f2;

@@ -20,7 +20,10 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
     if (reduceMotion) return;
 
     const lenis = new Lenis({
-      duration: 1.1,
+      // A slow, decelerating ease-out (cubic) over a longer-than-native
+      // duration is what gives the scroll its "heavy, modern" feel rather
+      // than the browser's stepwise native scroll.
+      duration: 1.5,
       easing: (t: number) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
     });

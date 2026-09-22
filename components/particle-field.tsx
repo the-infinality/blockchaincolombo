@@ -36,7 +36,7 @@ function randomBetween(min: number, max: number) {
 }
 
 function createParticle(width: number, height: number): Particle {
-  const isBright = Math.random() > 0.88;
+  const isBright = Math.random() > 0.93;
   return {
     x: Math.random() * width,
     y: Math.random() * height,
@@ -86,7 +86,7 @@ export function ParticleField({ className = "absolute inset-0" }: { className?: 
       canvas!.style.height = `${height}px`;
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.min(Math.round((width * height) / 6500), 220);
+      const count = Math.min(Math.round((width * height) / 11000), 130);
       particles = Array.from({ length: count }, () => createParticle(width, height));
     }
     resize();

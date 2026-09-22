@@ -10,9 +10,9 @@ import { Button } from "@/components/ui/button";
 // from the client before this ships — kept the original copy here rather
 // than guess at one.
 //
-// Content-only now (no own <section>/background) — embedded directly
-// inside the same s1.jpg panel as the rest of scam-alerts-section.tsx,
-// rather than a separate section with its own background image.
+// Content-only (no own <section>/background) — embedded directly inside
+// the plain bordered panel in scam-alerts-section.tsx, rather than a
+// separate section of its own.
 export function ReportScamCallout() {
   return (
     <div className="mx-auto flex max-w-md flex-col items-center text-center">

@@ -1,9 +1,8 @@
-"use client";
-
 import Image from "next/image";
-import { motion } from "framer-motion";
 
+import { cn } from "@/lib/utils";
 import { LinkedinIcon, TwitterIcon } from "@/components/icons";
+import { Reveal } from "@/components/motion/reveal";
 
 export type BoardMember = {
   name: string;
@@ -14,37 +13,37 @@ export type BoardMember = {
 };
 
 // Ported from `.team-members` markup shared by who-we-are.php's two board
-// sections (`.meet-our-team` and `.meet-our-team-2`). Portraits sit in a
-// simple ringed circle and bob gently as if floating, each on its own
-// out-of-phase timing so the group doesn't move in unison.
+// sections (`.meet-our-team` and `.meet-our-team-2`). All four portraits
+// sit in a single evenly-aligned row (2x2 on mobile), separated by a thin
+// vertical divider between adjacent columns rather than a card border
+// around each member.
 export function BoardGrid({ members }: { members: BoardMember[] }) {
   return (
-    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-y-10 sm:grid-cols-4 sm:gap-y-0">
       {members.map((member, i) => (
-        <div key={member.name} className="text-center">
-          <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{
-              duration: 4.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: (i % 4) * 0.4,
-            }}
-            className="relative mx-auto size-32 overflow-hidden rounded-full border-2 border-white/25"
-          >
+        <Reveal
+          key={member.name}
+          delay={i * 0.1}
+          direction="left"
+          className={cn(
+            "flex flex-col items-center px-4 text-center sm:px-6",
+            i > 0 && "sm:border-l sm:border-white/15"
+          )}
+        >
+          <div className="relative size-28 overflow-hidden rounded-full border-2 border-white/25 sm:size-32">
             <Image
               src={member.image}
               alt={member.name}
               fill
               className="object-cover"
             />
-          </motion.div>
+          </div>
           <h3 className="mt-4 font-heading text-lg font-semibold">
             {member.name}
           </h3>
           <p className="text-sm text-muted-foreground">{member.position}</p>
           {(member.linkedin || member.twitter) && (
-            <div className="mt-2 flex justify-center gap-3">
+            <div className="mt-3 flex justify-center gap-3">
               {member.linkedin && (
                 <a
                   href={member.linkedin}
@@ -69,7 +68,7 @@ export function BoardGrid({ members }: { members: BoardMember[] }) {
               )}
             </div>
           )}
-        </div>
+        </Reveal>
       ))}
     </div>
   );

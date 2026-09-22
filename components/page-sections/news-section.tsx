@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 import { ArticleCard, type Article } from "@/components/cards/article-card";
+import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal";
 
 // The source (news.php) repeated this exact same item 5 times via
 // copy-paste — there was never 5 distinct news posts, just one block
@@ -22,32 +23,25 @@ const mediaReleases: Article[] = Array.from({ length: 3 }, () => ({
   desc: "FTX announced as the Naming Rights Sponsor for Sri Lanka Blockchain Week 2022. Blockchain Sri Lanka, the organisers of Sri Lanka Blockchain Week 2022, today announced that leading global...",
 }));
 
-// Everything — the "News" intro, "News of industry" items and the "Code
-// of Conduct" media releases — now lives inside one panel with n1.png as
-// its background, the whole panel sliding in as a single unit, and the
-// background image slowly zooming in as the user scrolls through it.
+// A full-bleed panel (no max-width gutter) with n1.png as its background,
+// deliberately zooming in as the user scrolls through. The intro copy sits
+// in its own tinted panel offset to one side, rather than plain centered
+// text floating on the photo.
 export function NewsSection() {
-  const ref = React.useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.35]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.4]);
 
   return (
-    <section id="news" className="scroll-mt-24 overflow-x-hidden px-4 py-16 sm:px-6 lg:px-8">
-      <motion.div
-        ref={ref}
-        initial={{ opacity: 0, x: 140 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ type: "spring", stiffness: 70, damping: 16, mass: 1 }}
-        className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-white/10"
-      >
+    <section id="news" ref={ref} className="scroll-mt-24 w-full overflow-x-hidden">
+      <Reveal className="relative w-full overflow-hidden border-y border-white/10">
         <motion.div style={{ scale: bgScale }} className="absolute inset-0">
           <Image src="/images/news/n1.png" alt="" fill className="object-cover object-top" />
         </motion.div>
         <div className="absolute inset-0 bg-[#050b1c]/80" />
 
-        <div className="relative px-4 py-16 sm:px-8 lg:px-12">
-          <div className="mx-auto max-w-3xl text-center">
+        <div className="relative px-4 py-20 sm:px-8 sm:py-28 lg:px-16">
+          <Reveal className="max-w-md rounded-2xl border border-white/15 bg-[#050b1c]/70 p-8 backdrop-blur-sm">
             <h2 className="font-heading text-4xl font-bold">News</h2>
             <p className="mt-2 text-lg font-medium">
               All News &amp; Information within the Sri Lankan Blockchain
@@ -58,29 +52,35 @@ export function NewsSection() {
               Lankan businesses and business professionals participating in
               the digital economy through blockchain technology.
             </p>
-          </div>
+          </Reveal>
 
-          <h3 className="mt-14 font-heading text-3xl font-bold">
-            <span className="text-primary">News of </span>industry
-          </h3>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2">
+          <Reveal>
+            <h3 className="mt-16 font-heading text-3xl font-bold">
+              <span className="text-primary">News of </span>industry
+            </h3>
+          </Reveal>
+          <RevealGroup className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {newsItems.map((item, i) => (
-              <ArticleCard key={i} article={item} />
+              <RevealItem key={i}>
+                <ArticleCard article={item} />
+              </RevealItem>
             ))}
-          </div>
+          </RevealGroup>
 
-          <h3 className="mt-14 font-heading text-3xl font-bold">Code of Conduct</h3>
-          <div className="mt-8 grid gap-6 sm:grid-cols-3">
+          <Reveal>
+            <h3 className="mt-16 font-heading text-3xl font-bold">Code of Conduct</h3>
+          </Reveal>
+          <RevealGroup className="mt-8 grid gap-6 sm:grid-cols-3">
             {mediaReleases.map((item, i) => (
-              <div key={i} className="space-y-2 border-l-2 border-accent pl-4">
+              <RevealItem key={i} className="space-y-2 border-l-2 border-accent pl-4">
                 <h4 className="font-heading font-semibold">{item.title}</h4>
                 <p className="text-xs text-white/60">{item.meta}</p>
                 <p className="text-sm text-white/75">{item.desc}</p>
-              </div>
+              </RevealItem>
             ))}
-          </div>
+          </RevealGroup>
         </div>
-      </motion.div>
+      </Reveal>
     </section>
   );
 }
