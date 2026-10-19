@@ -1,23 +1,22 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
+import { Anton } from "next/font/google";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 
 import { markHeroIntroComplete } from "@/lib/hero-intro-store";
 import { RevealGroup, RevealItem } from "@/components/motion/reveal";
 
-// Hero: hero-1-1.png as the backdrop — no dark overlay panel on top of it,
-// just the image's own opacity dialed down slightly for text legibility —
-// with "Blockchain Colombo" stacked above "Unveiling the future" in normal
-// flow (never overlapping). Everything — background image and both
-// headline lines — fades/slides in together as one entrance (RevealGroup),
-// not a staged multi-second sequence. Once revealed, each layer also keeps
-// its own scroll-linked transform, scoped ONLY to this section's own
-// scroll range: the tagline grows and comes forward (higher scale/opacity/
-// z-index) while the headline recedes — shrinks and dims, but never
-// disappears or unmounts, so both remain in the DOM (settled into their
-// final state) even once scrolled past.
+// Heavy condensed display face for the masked headline only — the rest of
+// the site stays on General Sans (see app/layout.tsx).
+const anton = Anton({ weight: "400", subsets: ["latin"] });
+
+// Hero: "BLOCKCHAIN / COLOMBO" set in a heavy condensed face on a flat
+// #796753 field, with hero-2.png showing only *through* the letterforms
+// (background-clip: text). The image is applied once to the whole two-line
+// heading block — not per line — so the artwork reads as one continuous
+// picture across both words. On scroll the headline recedes slightly,
+// scoped to this section's own scroll range.
 export function HeroSequence() {
   const shouldReduceMotion = useReducedMotion();
   const sectionRef = React.useRef<HTMLElement>(null);
@@ -26,73 +25,49 @@ export function HeroSequence() {
     offset: ["start start", "end start"],
   });
 
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
-  const imageOpacity = useTransform(scrollYProgress, [0, 0.85], [0.55, 0.2]);
-
-  // Headline: recedes — shrinks and dims, but settles rather than vanishing.
-  const titleScale = useTransform(scrollYProgress, [0, 1], [1, 0.6]);
-  const titleY = useTransform(scrollYProgress, [0, 1], [0, -30]);
-  const titleOpacity = useTransform(scrollYProgress, [0, 1], [1, 0.5]);
-
-  // Tagline: comes forward — grows and brightens, becoming the visually
-  // dominant line as the headline recedes.
-  const taglineScale = useTransform(scrollYProgress, [0, 1], [1, 2.2]);
-  const taglineOpacity = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const titleScale = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
+  const titleOpacity = useTransform(scrollYProgress, [0, 1], [1, 0.6]);
 
   React.useEffect(() => {
-    // No staged load sequence anymore — the hero (and the header that
-    // waits on it, see lib/hero-intro-store.ts) reveals immediately.
+    // No staged load sequence — the hero (and the header that waits on it,
+    // see lib/hero-intro-store.ts) reveals immediately.
     markHeroIntroComplete();
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[95vh] items-center justify-center overflow-hidden"
+      className="relative flex min-h-[95vh] items-center justify-center overflow-hidden bg-[#796753] px-4 pt-32 pb-16 sm:pt-36"
     >
-      <RevealGroup className="absolute inset-0 flex items-center justify-center">
-        <motion.div
-          variants={{ hidden: { opacity: 0.2, scale: 0.85 }, visible: { opacity: 1, scale: 1 } }}
-          className="absolute inset-0"
-        >
-          <motion.div
-            style={{ scale: imageScale, opacity: imageOpacity }}
-            className="absolute inset-0"
-          >
-            <Image
-              src="/images/hero/hero-1-1.png"
-              alt=""
-              fill
-              priority
-              className="object-cover"
-            />
-          </motion.div>
-        </motion.div>
+      {/* Small mono-type tagline row, just below the fixed site header. */}
+      <div className="absolute inset-x-0 top-20 z-10 grid grid-cols-[1fr_auto_1fr] items-center px-6 font-mono text-xs tracking-widest text-[#f5efe6] uppercase sm:px-10 lg:px-12">
+        <span className="col-start-2 hidden sm:block">Art &ndash; Culture &ndash; Community</span>
+        <a href="#contact-us" className="col-start-3 justify-self-end transition-opacity hover:opacity-70">
+          Connect
+        </a>
+      </div>
 
-        <div className="relative z-10 flex flex-col items-center gap-4 px-6 pt-48 text-center drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)] sm:pt-52">
-          <RevealItem className="relative z-10">
-            <motion.h1
-              style={
-                shouldReduceMotion
-                  ? undefined
-                  : { scale: titleScale, y: titleY, opacity: titleOpacity }
-              }
-              className="max-w-4xl font-sans text-7xl font-semibold text-white sm:text-8xl"
+      <RevealGroup className="flex w-full flex-col items-center gap-6">
+        <RevealItem>
+          <motion.h1
+            style={shouldReduceMotion ? undefined : { scale: titleScale, opacity: titleOpacity }}
+            className={`${anton.className} inline-block text-center text-[clamp(3rem,20vw,18rem)] leading-[0.88] tracking-[-0.01em] text-transparent uppercase`}
+          >
+            <span
+              className="block bg-cover bg-center bg-no-repeat bg-clip-text [-webkit-background-clip:text]"
+              style={{ backgroundImage: "url('/images/hero/hero-2.png')" }}
             >
-              Blockchain Colombo
-            </motion.h1>
-          </RevealItem>
-          <RevealItem className="relative z-20">
-            <motion.p
-              style={
-                shouldReduceMotion ? undefined : { scale: taglineScale, opacity: taglineOpacity }
-              }
-              className="text-lg font-medium tracking-[0.2em] text-white/70 uppercase sm:text-xl"
-            >
-              Unveiling the future
-            </motion.p>
-          </RevealItem>
-        </div>
+              Blockchain
+              <br />
+              Colombo
+            </span>
+          </motion.h1>
+        </RevealItem>
+        <RevealItem>
+          <p className="text-center text-lg font-medium tracking-[0.2em] text-white/80 uppercase sm:text-xl">
+            Unveiling the future
+          </p>
+        </RevealItem>
       </RevealGroup>
     </section>
   );

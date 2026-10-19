@@ -4,10 +4,9 @@ import { z } from "zod";
 // The footer form in footer.php had no working submit handler either
 // (Contact Form 7 was referenced in functions.php but never actually
 // rendered — see PROJECT-README.md §3.4). New endpoint, not a port.
+// Email-only signup (the footer's "Stay in the loop" field).
 const payloadSchema = z.object({
-  name: z.string().min(1),
   email: z.string().email(),
-  message: z.string().min(1),
 });
 
 export async function POST(request: Request) {

@@ -25,6 +25,14 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
+// Thin #796753-outlined fields to match the contact section's
+// tech-editorial styling.
+const FIELD =
+  "h-9 rounded-sm border-[#796753] bg-transparent text-white placeholder:text-white/45 focus-visible:border-white focus-visible:ring-0 dark:bg-transparent";
+const SUBMIT =
+  "rounded-sm bg-[#796753] px-5 text-[#050b1c] hover:bg-[#796753]/80";
+
+
 export function GeneralEnquiryForm() {
   const [status, setStatus] = React.useState<"idle" | "success" | "error">(
     "idle"
@@ -52,14 +60,14 @@ export function GeneralEnquiryForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-3">
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Name" {...field} />
+                <Input className={FIELD} placeholder="Name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -72,7 +80,7 @@ export function GeneralEnquiryForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Phone" {...field} />
+                <Input className={FIELD} placeholder="Phone" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -85,7 +93,7 @@ export function GeneralEnquiryForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input type="email" placeholder="Email Address" {...field} />
+                <Input className={FIELD} type="email" placeholder="Email Address" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -98,7 +106,7 @@ export function GeneralEnquiryForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea placeholder="Message" rows={5} {...field} />
+                <Textarea className={`${FIELD} h-auto min-h-24`} placeholder="Message" rows={4} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -106,15 +114,11 @@ export function GeneralEnquiryForm() {
         />
 
         <div>
-          <Button
-            type="submit"
-            variant="secondary"
-            disabled={form.formState.isSubmitting}
-          >
-            {form.formState.isSubmitting ? "Sending…" : "Send Message"}
+          <Button type="submit" className={SUBMIT} disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? "Sending…" : "Submit"}
           </Button>
           {status === "success" && (
-            <p className="mt-2 text-sm text-primary">
+            <p className="mt-2 text-sm text-white">
               Thanks — we&rsquo;ll be in touch soon.
             </p>
           )}

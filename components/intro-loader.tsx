@@ -3,7 +3,15 @@
 import * as React from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
-const WORD = "BLOCKCHAIN COLOMBO";
+const WORDS = ["Blockchain", "Colombo"];
+// Running letter index at the start of each word, for the stagger delay.
+const wordOffsets = WORDS.map((_, w) => WORDS.slice(0, w).join("").length);
+
+const LABEL = "font-mono text-[11px] tracking-widest uppercase text-white/70";
+
+// Full-screen intro in the footer's tech-editorial style: site navy, thin
+// white rules top and bottom with small mono labels, and the bold wordmark
+// rising in letter by letter above a drawn white rule.
 
 export function IntroLoader() {
   const shouldReduceMotion = useReducedMotion();
@@ -27,7 +35,6 @@ export function IntroLoader() {
     return () => window.clearTimeout(doneTimer);
   }, [phase]);
 
-  const letters = React.useMemo(() => WORD.split(""), []);
 
   return (
     <AnimatePresence>
@@ -37,27 +44,53 @@ export function IntroLoader() {
           initial={{ clipPath: "inset(0% 0% 0% 0%)" }}
           exit={{ clipPath: "inset(0% 0% 100% 0%)" }}
           transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}
-          className="fixed inset-0 z-1000 flex items-center justify-center bg-[#0f1d30]"
+          className="fixed inset-0 z-1000 flex flex-col justify-between bg-[#050b1c] px-4 py-6 text-white sm:px-8 lg:px-12"
         >
-          <div className="flex flex-wrap items-center justify-center gap-x-1 px-6 text-center">
-            {letters.map((letter, i) => (
-              <motion.span
-                key={`${letter}-${i}`}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.15 + i * 0.03, ease: [0.22, 1, 0.36, 1] }}
-                className="font-heading text-2xl font-semibold tracking-tight text-foreground sm:text-4xl"
-              >
-                {letter === " " ? "\u00A0" : letter}
-              </motion.span>
-            ))}
+          {/* Top rule + mono labels, mirroring the footer's ruled strip. */}
+          <div className={`flex justify-between border-b border-white/80 pb-3 ${LABEL}`}>
+            <span>Info</span>
+            <span>Colombo, Sri Lanka</span>
           </div>
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute bottom-[38%] h-px w-40 origin-left bg-primary sm:w-56"
-          />
+
+          <div className="mx-auto w-full max-w-4xl">
+            <p className={LABEL}>Sri Lanka&rsquo;s peak blockchain industry network</p>
+            <div className="mt-4 flex flex-wrap gap-x-[0.3em] font-heading text-[clamp(2.25rem,8vw,6rem)] leading-none font-bold">
+              {WORDS.map((word, w) => (
+                // Letters are grouped per word so lines only ever break
+                // between words, never mid-word.
+                <span key={word} className="inline-flex whitespace-nowrap">
+                  {word.split("").map((letter, i) => (
+                    <motion.span
+                      key={i}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 0.5,
+                        delay: 0.15 + (wordOffsets[w] + i) * 0.03,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                    >
+                      {letter}
+                    </motion.span>
+                  ))}
+                </span>
+              ))}
+            </div>
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-6 h-px origin-left bg-white"
+            />
+            <p className="mt-4 font-mono text-sm tracking-wide uppercase">
+              Membership / Partnership / Press
+            </p>
+          </div>
+
+          <div className={`flex justify-between border-t border-white/80 pt-3 ${LABEL}`}>
+            <span>Blockchain Colombo</span>
+            <span>Loading&hellip;</span>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

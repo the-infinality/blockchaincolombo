@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ParticleField } from "@/components/particle-field";
@@ -26,24 +26,35 @@ const pillars = [
   },
 ];
 
-// Substantial, viewport-proportion cards on the section's own ambient
-// particle backdrop, rather than stacked around a shared piece of artwork.
+const whatWeDoIntro = [
+  "The blockchain ecosystem is growing rapidly in Sri Lanka and has the potential to revolutionize the way Sri Lankans interact with the country and each other. Blockchain Colombo is helping to ensure that the opportunities created by this technology are available to all Sri Lankans.",
+  "These advantages create a network of opportunities that are simply unmatched—making Colombo the ideal place to bring or expand your business, no matter your size or sector. And you don’t have to go it alone. We’re here to help you establish the critical connections you need to succeed in our diverse business ecosystem.",
+  "Blockchain Colombo aims to be the beating heart of industry bringing business, academia, and government under one roof.",
+];
+
+// Shared display size for both oversized headings.
+const DISPLAY = "font-heading text-[clamp(2.5rem,5.5vw,5.25rem)] leading-[0.92] font-bold tracking-tight uppercase";
+
+// Editorial layout on the section's own ambient particle backdrop: the
+// three-line headline on the left with the intro paragraph opposite it on
+// the right (bottom-aligned to the headline), then a centered "What we do"
+// heading with its intro paragraphs, and the three numbered pillars as
+// full-width columns underneath. Stacks to a single column below lg.
 export function WhatWeDo() {
   return (
-    <section className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-32 lg:px-8">
+    <section className="relative mx-auto max-w-[96rem] px-4 py-20 sm:px-8 sm:py-32 lg:px-12">
       <ParticleField className="absolute inset-0" />
 
-      <RevealGroup className="relative mx-auto max-w-2xl text-center">
+      <RevealGroup className="relative grid gap-8 lg:grid-cols-2 lg:items-end lg:gap-x-6">
         <RevealItem>
-          <p className="text-xs font-semibold tracking-[0.3em] text-accent uppercase">
-            Peak body for blockchain
-          </p>
-          <h2 className="mt-2 font-heading text-3xl font-bold sm:text-5xl">
-            in Sri Lanka
+          <h2 className={DISPLAY}>
+            <span className="lg:block">Peak body for </span>
+            <span className="text-[#796753] lg:block">blockchain </span>
+            <span className="text-[#796753] lg:block">in Sri Lanka</span>
           </h2>
         </RevealItem>
         <RevealItem>
-          <p className="mx-auto mt-5 max-w-xl text-muted-foreground">
+          <p className="max-w-xl text-lg text-muted-foreground sm:text-xl lg:text-2xl">
             Blockchain Colombo is Sri Lanka&rsquo;s peak industry network for
             businesses implementing blockchain or distributed ledger
             technology. Collectively, our members and the industries they
@@ -52,43 +63,39 @@ export function WhatWeDo() {
         </RevealItem>
       </RevealGroup>
 
-      <Reveal className="relative mt-16 flex items-end justify-between gap-6">
-        <h3 className="font-heading text-2xl font-semibold sm:text-3xl">What we do</h3>
-        <a
-          href="#contact-us"
-          aria-label="Learn more about what we do"
-          className="flex size-12 shrink-0 items-center justify-center rounded-full border border-white/15 text-white transition-colors hover:border-accent hover:text-accent"
-        >
-          <ArrowUpRight className="size-5" />
-        </a>
-      </Reveal>
+      <div className="relative mt-20 sm:mt-28">
+        <RevealGroup className="mx-auto max-w-4xl text-center">
+          <RevealItem>
+            <h3 className={DISPLAY}>What we do</h3>
+          </RevealItem>
+          {whatWeDoIntro.map((paragraph) => (
+            <RevealItem key={paragraph.slice(0, 24)}>
+              <p className="mt-8 text-lg text-muted-foreground sm:text-xl lg:text-2xl">
+                {paragraph}
+              </p>
+            </RevealItem>
+          ))}
+        </RevealGroup>
 
-      <div className="relative mt-8 grid gap-6 md:grid-cols-3">
-        {pillars.map((pillar, i) => (
-          <Reveal
-            key={pillar.title}
-            delay={progressiveDelay(i)}
-            className="flex min-h-[28rem] flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.03] p-8 transition-colors hover:border-accent/50"
-          >
-            <div>
-              <span className="text-xs font-semibold tracking-[0.3em] text-accent uppercase">
-                {pillar.number}
-              </span>
-              <h4 className="mt-6 font-heading text-4xl font-bold">{pillar.title}</h4>
-            </div>
-            <p className="mt-8 text-muted-foreground">{pillar.content}</p>
-          </Reveal>
-        ))}
+        <div className="mt-20 grid gap-10 sm:grid-cols-3 sm:gap-8 lg:gap-12">
+          {pillars.map((pillar, i) => (
+            <Reveal key={pillar.title} delay={progressiveDelay(i)}>
+              <span className="block text-2xl text-foreground/80">{pillar.number}</span>
+              <h4 className="mt-4 font-heading text-2xl font-medium text-[#796753]">{pillar.title}</h4>
+              <p className="mt-3 max-w-sm text-muted-foreground">{pillar.content}</p>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={progressiveDelay(pillars.length)} className="mt-12 flex sm:justify-end">
+          <Button asChild>
+            <a href="#contact-us">
+              Learn More
+              <ArrowRight className="size-4" />
+            </a>
+          </Button>
+        </Reveal>
       </div>
-
-      <Reveal delay={progressiveDelay(pillars.length)} className="relative">
-        <Button asChild className="mt-14">
-          <a href="#contact-us">
-            Learn More
-            <ArrowRight className="size-4" />
-          </a>
-        </Button>
-      </Reveal>
     </section>
   );
 }

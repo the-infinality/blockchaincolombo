@@ -33,22 +33,14 @@ export default function Home() {
           <PurposeOfCommunity />
         </div>
         <Partnerships />
-        <div className={BAND}>
-          <MemberStories />
-        </div>
+        <MemberStories />
       </section>
       <WhoWeAreSection />
-      <div className={BAND}>
-        <OurMembersSection />
-      </div>
+      <OurMembersSection />
       <MembershipTypesSection />
-      <div className={BAND}>
-        <NewsSection />
-      </div>
+      <NewsSection />
       <ScamAlertsSection />
-      <div className={BAND}>
-        <BlogSection />
-      </div>
+      <BlogSection />
       <ContactUsSection />
     </>
   );

@@ -3,9 +3,8 @@
 import * as React from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-import { Menu } from "lucide-react";
+import { ArrowRight, Menu } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetClose,
@@ -21,9 +20,11 @@ import {
   subscribeHeroIntro,
 } from "@/lib/hero-intro-store";
 
-// Standard sticky top nav — transparent over the hero, solid/blurred once
-// scrolled past it. Replaces the old scroll-jacked docking nav that used to
-// live in components/hero-sequence.tsx.
+// Fixed top nav in the footer's tech-editorial style: bold wordmark, small
+// mono uppercase links, and an outlined CTA box with an attached arrow
+// cell. Transparent over the hero; once scrolled, a solid navy bar with a
+// thin white rule (no backdrop blur, which re-renders every frame over the
+// animated particle background).
 const SCROLL_THRESHOLD = 40;
 
 // mainNav includes "Contact Us" for the footer's full link list, but the
@@ -59,63 +60,54 @@ export function SiteHeader() {
       animate={{ opacity: introComplete ? 1 : 0 }}
       transition={{ duration: shouldReduceMotion ? 0 : 1.8, ease: [0.16, 1, 0.3, 1] }}
       style={{ pointerEvents: introComplete ? "auto" : "none" }}
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled
-          ? "border-b border-white/10 bg-[#050b1c]/90 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent"
+      className={`fixed inset-x-0 top-0 z-50 text-white transition-colors duration-300 ${
+        scrolled ? "border-b border-white/80 bg-[#050b1c]/95" : "border-b border-transparent bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-10">
+      <div className="mx-auto flex h-16 max-w-[96rem] items-center justify-between gap-6 px-4 sm:px-8 lg:px-12">
         <a href="#top" className="flex items-center gap-2.5">
           <Image src="/logo.svg" alt="" width={32} height={32} className="size-8" />
-          <span className="font-heading text-lg font-semibold text-white">
-            Blockchain Colombo
-          </span>
+          <span className="font-heading text-lg font-bold">Blockchain Colombo</span>
         </a>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav aria-label="Main" className="hidden items-center gap-6 font-mono text-[11px] tracking-widest uppercase lg:flex xl:gap-8">
           {navLinks.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-white/70 transition-colors hover:text-white"
-            >
+            <a key={item.href} href={item.href} className="transition-opacity hover:opacity-70">
               {item.label}
             </a>
           ))}
         </nav>
 
-        <div className="hidden md:block">
-          <Button asChild size="sm">
-            <a href={headerCta.href}>{headerCta.label}</a>
-          </Button>
-        </div>
+        <a
+          href={headerCta.href}
+          className="hidden items-center border border-white font-mono text-[11px] tracking-widest uppercase transition-colors hover:bg-white hover:text-[#050b1c] lg:flex"
+        >
+          <span className="px-3 py-2">{headerCta.label}</span>
+          <span className="flex self-stretch items-center border-l border-current px-2.5">
+            <ArrowRight className="size-3.5" />
+          </span>
+        </a>
 
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
+            <button
+              type="button"
               aria-label="Open menu"
-              className="text-white hover:bg-white/10 hover:text-white md:hidden"
+              className="flex size-9 items-center justify-center border border-white transition-colors hover:bg-white hover:text-[#050b1c] lg:hidden"
             >
-              <Menu className="size-5" />
-            </Button>
+              <Menu className="size-4" />
+            </button>
           </SheetTrigger>
-          <SheetContent
-            side="right"
-            className="border-white/10 bg-[#050b1c] text-white"
-          >
+          <SheetContent side="right" className="border-white/80 bg-[#050b1c] text-white">
             <SheetHeader>
-              <SheetTitle className="text-white">Menu</SheetTitle>
+              <SheetTitle className="font-mono text-[11px] font-normal tracking-widest text-white/70 uppercase">
+                Navigate
+              </SheetTitle>
             </SheetHeader>
-            <nav className="flex flex-col gap-1 px-4">
+            <nav aria-label="Mobile" className="flex flex-col px-4 font-mono text-xs tracking-widest uppercase">
               {navLinks.map((item) => (
                 <SheetClose asChild key={item.href}>
-                  <a
-                    href={item.href}
-                    className="rounded-lg px-3 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-                  >
+                  <a href={item.href} className="border-b border-white/30 py-3 transition-opacity hover:opacity-70">
                     {item.label}
                   </a>
                 </SheetClose>
@@ -123,9 +115,10 @@ export function SiteHeader() {
               <SheetClose asChild>
                 <a
                   href={headerCta.href}
-                  className="mt-3 rounded-lg bg-primary px-3 py-2.5 text-center text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/80"
+                  className="mt-6 flex items-center justify-between border border-white px-3 py-2.5 transition-colors hover:bg-white hover:text-[#050b1c]"
                 >
                   {headerCta.label}
+                  <ArrowRight className="size-3.5" />
                 </a>
               </SheetClose>
             </nav>

@@ -4,35 +4,25 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { ArrowRight } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 const schema = z.object({
-  name: z.string().min(1, "Name is required"),
   email: z.string().email("Enter a valid email address"),
-  message: z.string().min(1, "Message is required"),
 });
 
 type FormValues = z.infer<typeof schema>;
 
-// Replaces the dead newsletter/contact form in footer.php (no working
-// action or name attributes in the original — see PROJECT-README.md §3.4).
+// Email-only "Stay in the loop" signup: a single outlined field with an
+// attached arrow submit button. Replaces the dead newsletter/contact form
+// in footer.php (no working action or name attributes in the original —
+// see PROJECT-README.md §3.4).
 export function NewsletterForm() {
-  const [status, setStatus] = React.useState<"idle" | "success" | "error">(
-    "idle"
-  );
+  const [status, setStatus] = React.useState<"idle" | "success" | "error">("idle");
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { name: "", email: "", message: "" },
+    defaultValues: { email: "" },
   });
 
   async function onSubmit(values: FormValues) {
@@ -53,55 +43,40 @@ export function NewsletterForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="Your Name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormControl>
-                <Input type="email" placeholder="Email Address" {...field} />
-              </FormControl>
+              <div className="flex border border-white">
+                <FormControl>
+                  <input
+                    type="email"
+                    placeholder="Your email address..."
+                    aria-label="Email address"
+                    className="min-w-0 flex-1 bg-transparent px-3 py-2 font-mono text-xs text-white outline-none placeholder:text-white/50"
+                    {...field}
+                  />
+                </FormControl>
+                <button
+                  type="submit"
+                  aria-label="Subscribe"
+                  disabled={form.formState.isSubmitting}
+                  className="flex w-10 shrink-0 items-center justify-center border-l border-white text-white transition-colors hover:bg-white hover:text-[#050b1c] disabled:opacity-50"
+                >
+                  <ArrowRight className="size-4" />
+                </button>
+              </div>
               <FormMessage />
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="message"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Textarea placeholder="Message" rows={4} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button
-          type="submit"
-          className="w-full sm:w-auto"
-          disabled={form.formState.isSubmitting}
-        >
-          {form.formState.isSubmitting ? "Sending…" : "Send"}
-        </Button>
         {status === "success" && (
-          <p className="text-sm text-primary">Thanks for reaching out!</p>
+          <p className="mt-2 font-mono text-xs text-white">Thanks — you&rsquo;re on the list.</p>
         )}
         {status === "error" && (
-          <p className="text-sm text-destructive">
+          <p className="mt-2 font-mono text-xs text-destructive">
             Something went wrong. Please try again.
           </p>
         )}

@@ -20,6 +20,12 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
     if (reduceMotion) return;
 
     const lenis = new Lenis({
+      // Lenis re-measures the scroll limit whenever `content` resizes. Its
+      // default (<html>) is pinned to the viewport height by the root
+      // layout's `h-full`, so it never resizes as images/fonts/reveals grow
+      // the page — leaving a stale limit that stops short of the footer.
+      // <body> grows with the content, so observe that instead.
+      content: document.body,
       // A slow, decelerating ease-out (cubic) over a longer-than-native
       // duration is what gives the scroll its "heavy, modern" feel rather
       // than the browser's stepwise native scroll.

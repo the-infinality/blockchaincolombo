@@ -77,6 +77,14 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
+// Thin #796753-outlined fields to match the contact section's
+// tech-editorial styling.
+const FIELD =
+  "h-9 rounded-sm border-[#796753] bg-transparent text-white placeholder:text-white/45 focus-visible:border-white focus-visible:ring-0 dark:bg-transparent";
+const SUBMIT =
+  "rounded-sm bg-[#796753] px-5 text-[#050b1c] hover:bg-[#796753]/80";
+
+
 export function MembershipEnquiryForm() {
   const [status, setStatus] = React.useState<"idle" | "success" | "error">(
     "idle"
@@ -110,7 +118,7 @@ export function MembershipEnquiryForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 sm:grid-cols-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-3">
         <FormField
           control={form.control}
           name="membershipCategory"
@@ -118,7 +126,7 @@ export function MembershipEnquiryForm() {
             <FormItem>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className={`w-full ${FIELD} data-placeholder:text-white/45 data-[size=default]:h-9`}>
                     <SelectValue placeholder="Membership Category" />
                   </SelectTrigger>
                 </FormControl>
@@ -142,7 +150,7 @@ export function MembershipEnquiryForm() {
             <FormItem>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className={`w-full ${FIELD} data-placeholder:text-white/45 data-[size=default]:h-9`}>
                     <SelectValue placeholder="Province" />
                   </SelectTrigger>
                 </FormControl>
@@ -166,7 +174,7 @@ export function MembershipEnquiryForm() {
             <FormItem>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className={`w-full ${FIELD} data-placeholder:text-white/45 data-[size=default]:h-9`}>
                     <SelectValue placeholder="Business Category" />
                   </SelectTrigger>
                 </FormControl>
@@ -189,7 +197,7 @@ export function MembershipEnquiryForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Contact Name" {...field} />
+                <Input className={FIELD} placeholder="Contact Name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -202,7 +210,7 @@ export function MembershipEnquiryForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Business Name" {...field} />
+                <Input className={FIELD} placeholder="Business Name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -215,7 +223,7 @@ export function MembershipEnquiryForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Phone" {...field} />
+                <Input className={FIELD} placeholder="Phone" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -228,7 +236,7 @@ export function MembershipEnquiryForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Business URL" {...field} />
+                <Input className={FIELD} placeholder="Business URL" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -241,19 +249,19 @@ export function MembershipEnquiryForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input type="email" placeholder="Email Address" {...field} />
+                <Input className={FIELD} type="email" placeholder="Email Address" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="sm:col-span-2">
-          <Button type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? "Sending…" : "Send Message"}
+        <div className="pt-1">
+          <Button type="submit" className={SUBMIT} disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? "Sending…" : "Submit"}
           </Button>
           {status === "success" && (
-            <p className="mt-2 text-sm text-primary">
+            <p className="mt-2 text-sm text-white">
               Thanks — we&rsquo;ll be in touch soon.
             </p>
           )}

@@ -1,56 +1,48 @@
-import Image from "next/image";
-
-import { cn } from "@/lib/utils";
-import { LinkedinIcon, TwitterIcon } from "@/components/icons";
+import { LinkedinIcon, XIcon } from "@/components/icons";
 import { Reveal } from "@/components/motion/reveal";
+import { GridLine, LineGrid } from "@/components/motion/grid-lines";
 
 export type BoardMember = {
   name: string;
   position: string;
-  image: string;
   linkedin?: string;
   twitter?: string;
 };
 
-// Ported from `.team-members` markup shared by who-we-are.php's two board
-// sections (`.meet-our-team` and `.meet-our-team-2`). All four portraits
-// sit in a single evenly-aligned row (2x2 on mobile), separated by a thin
-// vertical divider between adjacent columns rather than a card border
-// around each member.
+const pad = (n: number) => String(n).padStart(2, "0");
+
+// Minimal 2x2 directory of board members: thin #796753 hairline grid (no
+// portraits), each cell carrying a small mono index top-left, the name
+// mid-cell, and the role bottom-left with social links bottom-right.
+// Single column on small screens. The hairlines draw themselves in as the
+// grid scrolls into view (outer frame first, then each cell in turn).
 export function BoardGrid({ members }: { members: BoardMember[] }) {
   return (
-    <div className="grid grid-cols-2 gap-y-10 sm:grid-cols-4 sm:gap-y-0">
+    <LineGrid className="grid text-[#796753] sm:grid-cols-2">
+      <GridLine axis="x" className="top-0 bg-[#796753]" />
+      <GridLine axis="y" className="left-0 bg-[#796753]" />
       {members.map((member, i) => (
         <Reveal
           key={member.name}
           delay={i * 0.1}
-          direction="left"
-          className={cn(
-            "flex flex-col items-center px-4 text-center sm:px-6",
-            i > 0 && "sm:border-l sm:border-white/15"
-          )}
+          className="relative flex min-h-56 flex-col p-4 sm:min-h-64 sm:p-5"
         >
-          <div className="relative size-28 overflow-hidden rounded-full border-2 border-white/25 sm:size-32">
-            <Image
-              src={member.image}
-              alt={member.name}
-              fill
-              className="object-cover"
-            />
-          </div>
-          <h3 className="mt-4 font-heading text-lg font-semibold">
+          <GridLine axis="y" delay={0.2 + i * 0.12} className="right-0 bg-[#796753]" />
+          <GridLine axis="x" delay={0.2 + i * 0.12} className="bottom-0 bg-[#796753]" />
+          <span className="font-mono text-[11px]">{pad(i + 1)}</span>
+          <h3 className="mt-auto pt-10 font-heading text-2xl sm:text-[1.75rem]">
             {member.name}
           </h3>
-          <p className="text-sm text-muted-foreground">{member.position}</p>
-          {(member.linkedin || member.twitter) && (
-            <div className="mt-3 flex justify-center gap-3">
+          <div className="mt-auto flex items-end justify-between gap-4 pt-6">
+            <p className="text-sm leading-snug sm:text-base">{member.position}</p>
+            <div className="flex shrink-0 gap-3">
               {member.linkedin && (
                 <a
                   href={member.linkedin}
                   target="_blank"
                   rel="noreferrer"
                   aria-label={`${member.name} on LinkedIn`}
-                  className="text-muted-foreground transition-colors hover:text-primary"
+                  className="transition-opacity hover:opacity-70"
                 >
                   <LinkedinIcon className="size-4" />
                 </a>
@@ -60,16 +52,16 @@ export function BoardGrid({ members }: { members: BoardMember[] }) {
                   href={member.twitter}
                   target="_blank"
                   rel="noreferrer"
-                  aria-label={`${member.name} on Twitter`}
-                  className="text-muted-foreground transition-colors hover:text-primary"
+                  aria-label={`${member.name} on X`}
+                  className="transition-opacity hover:opacity-70"
                 >
-                  <TwitterIcon className="size-4" />
+                  <XIcon className="size-4" />
                 </a>
               )}
             </div>
-          )}
+          </div>
         </Reveal>
       ))}
-    </div>
+    </LineGrid>
   );
 }
