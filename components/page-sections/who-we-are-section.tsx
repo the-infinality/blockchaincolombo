@@ -1,8 +1,6 @@
 import { RevealGroup, RevealItem } from "@/components/motion/reveal";
 import { BoardGrid, type BoardMember } from "@/components/sections/board-grid";
 
-// Board members, in display order (numbered 01–05 in the grid). Social
-// icons render only for links that exist — Ornella has no X account.
 const board: BoardMember[] = [
   {
     name: "Daks Gunaratne",
@@ -39,8 +37,6 @@ const board: BoardMember[] = [
 export function WhoWeAreSection() {
   return (
     <section id="who-we-are" className="scroll-mt-16">
-      {/* Board: transparent so the site's particle background shows
-          through. Intro copy on the left, 3-over-2 member grid on the right. */}
       <div className="mx-auto grid max-w-[96rem] gap-12 px-4 py-20 sm:px-8 sm:py-32 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] lg:gap-16 lg:px-12">
         <RevealGroup>
           <RevealItem>

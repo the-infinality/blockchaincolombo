@@ -14,10 +14,6 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-// Email-only "Stay in the loop" signup: a single outlined field with an
-// attached arrow submit button. Replaces the dead newsletter/contact form
-// in footer.php (no working action or name attributes in the original —
-// see PROJECT-README.md §3.4).
 export function NewsletterForm() {
   const [status, setStatus] = React.useState<"idle" | "success" | "error">("idle");
   const form = useForm<FormValues>({

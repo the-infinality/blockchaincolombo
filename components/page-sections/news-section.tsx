@@ -8,10 +8,6 @@ type Article = {
   desc: string;
 };
 
-// The source (news.php) repeated this exact same item 5 times via
-// copy-paste — there was never 5 distinct news posts, just one block
-// duplicated. Kept as data arrays so swapping in real articles later is a
-// one-line change, not a template rewrite.
 const newsItems: Article[] = Array.from({ length: 2 }, () => ({
   title: "Blockchain Presents: State of Play",
   meta: "By admin | Mar 4, 2022",
@@ -41,16 +37,9 @@ function ArticleItem({ article, index }: { article: Article; index?: number }) {
   );
 }
 
-// Full-width flat #796753 panel with all type in deep navy — tag,
-// oversized heading, subheading, intro, then the "News of industry" (in
-// white) and "Code of Conduct" groups divided by hairlines. The cut-out figure
-// (transparent PNG, slightly faded) sits pinned to the bottom-right corner,
-// behind the copy.
 export function NewsSection() {
   return (
     <section id="news" className="relative flex scroll-mt-16 flex-col overflow-hidden bg-[#796753] text-[#050b1c] lg:block">
-      {/* Shown whole (`contain`) and capped so the 1280px source is never
-          upscaled. In normal flow below lg so it never overlaps the copy. */}
       <div className="pointer-events-none order-last aspect-video w-full lg:absolute lg:-right-[8%] lg:bottom-0 lg:w-[62%] lg:max-w-[1280px]">
         <div className="relative size-full">
           <Image

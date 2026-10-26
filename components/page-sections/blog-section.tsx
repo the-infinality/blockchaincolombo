@@ -3,9 +3,6 @@ import Image from "next/image";
 import { RevealGroup, RevealItem } from "@/components/motion/reveal";
 import { GridLine, LineList } from "@/components/motion/grid-lines";
 
-// blog.php repeated this same headline 3 times in "Editor's picks" —
-// placeholder/demo content in the source, not real distinct posts. Kept as
-// data so swapping in real picks later is a one-line change.
 const picks = [
   { category: "Editor’s picks", headline: "Editor’s picks" },
   { category: "Artificial Intelligence", headline: "3 AI analytics to add to your KPIs today" },
@@ -20,11 +17,6 @@ const post = {
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-// Flat #796753 panel with navy type and white hairlines: the oversized
-// "BLOG" title + subtitle top-left, a numbered editor's-picks table
-// top-right, the latest article bottom-left, and the
-// (darkened, faded) artwork pinned to the bottom-right corner. The
-// artwork's source is only 735px wide, so its box is capped near that.
 export function BlogSection() {
   return (
     <section id="blog" className="relative scroll-mt-16 overflow-hidden bg-[#796753] text-[#050b1c]">
@@ -73,8 +65,6 @@ export function BlogSection() {
         </RevealGroup>
       </div>
 
-      {/* Bottom-right artwork. In normal flow below lg so it never overlaps
-          the copy on narrow screens. */}
       <div className="relative ml-auto aspect-[3/2] w-full max-w-[600px] lg:absolute lg:right-0 lg:bottom-0 lg:w-[40%]">
         <Image
           src="/images/blog/b1.jpg"

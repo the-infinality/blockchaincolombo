@@ -1,15 +1,8 @@
 import { ParticleField } from "@/components/particle-field";
 
-/**
- * The site's permanent backdrop — a midnight-blue gradient field with the
- * shared twinkling glow-particle field (components/particle-field.tsx).
- * Fixed behind everything (-z-10); every panel/card in the app is
- * translucent or unfilled so this shows through consistently on every page.
- */
 export function SiteBackground() {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden bg-[#010308]">
-      {/* Midnight blue field — very dark, only a faint vignette of lift */}
       <div
         className="absolute inset-0"
         style={{
@@ -18,12 +11,8 @@ export function SiteBackground() {
         }}
       />
 
-      {/* Glowing, twinkling particles of varying sizes */}
       <ParticleField />
 
-      {/* Subtle grain so the gradient doesn't read as flat/digital. Plain
-          low opacity, not mix-blend-mode: a blend on a fixed full-screen
-          layer over the animated canvas has to be recomputed every frame. */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.03]"
         style={{

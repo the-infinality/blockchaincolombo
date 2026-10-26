@@ -7,9 +7,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  /* One font, site-wide: General Sans for both headings and body — a
-     clean geometric sans matching consensys.io's visual character. No
-     script/display face anymore. */
+
   --font-sans: "General Sans", "Segoe UI", system-ui, sans-serif;
   --font-heading: "General Sans", "Segoe UI", system-ui, sans-serif;
   --color-facebook: #65a2b4;
@@ -61,17 +59,12 @@
 }
 
 :root {
-  /* Midnight blue / white / dark grey — the whole palette, everywhere.
-     No green or clay accents anymore. */
   --brand-navy: #0b1a33;
   --brand-navy-deep: #050b1c;
   --brand-white: #f5f7f9;
   --brand-grey: #8b93a1;
   --brand-grey-dark: #23262d;
 
-  /* Background layer is transparent on purpose — <SiteBackground> sits
-     fixed behind everything, and every surface here is translucent so it
-     shows through. */
   --background: transparent;
   --foreground: #f5f7f9;
   --card: rgba(11, 26, 51, 0.5);

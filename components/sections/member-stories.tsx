@@ -9,9 +9,6 @@ const story = {
   member: "Daks Gunaratne - Chairman",
 };
 
-// Split layout on the site's own background: an oversized three-line
-// heading on the left (first line white, the rest in the brand brown) and
-// the chairman's message with signature on the right. Stacks below lg.
 export function MemberStories() {
   return (
     <section className="relative mx-auto max-w-[96rem] px-4 py-20 sm:px-8 sm:py-32 lg:px-12">

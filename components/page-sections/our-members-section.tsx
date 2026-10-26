@@ -3,9 +3,7 @@ import Image from "next/image";
 import { RevealGroup, RevealItem } from "@/components/motion/reveal";
 import { GridLine, LineList } from "@/components/motion/grid-lines";
 
-// Ported from our-members.php `.team-members` (all `href="#"` placeholders
-// in source — no real member URLs existed to carry over; keep as "#" until
-// real URLs are supplied).
+// Before going live: replace each "#" with the member's real website URL.
 const members = [
   { company: "VC Group Holdings", href: "#" },
   { company: "Adderbree", href: "#" },
@@ -22,11 +20,6 @@ const paragraphs = [
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-// Flat #796753 panel with all type in the site's deep navy: tag, oversized
-// heading and subheading up top, then the body copy beside a numbered,
-// hairline-divided member list (top-aligned, filling the remaining width).
-// The cut-out members artwork (transparent PNG, darkened and faded) sits
-// anchored to the section's bottom-right corner.
 export function OurMembersSection() {
   return (
     <section
@@ -73,8 +66,6 @@ export function OurMembersSection() {
         </RevealGroup>
       </div>
 
-      {/* Cut-out artwork, pinned bottom-right. In normal flow below lg so
-          it never overlaps the copy on narrow screens. */}
       <div className="relative aspect-[1344/576] w-full lg:absolute lg:right-0 lg:bottom-0 lg:w-[66%]">
         <Image
           src="/images/members/p1.png"

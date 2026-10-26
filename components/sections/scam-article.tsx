@@ -4,11 +4,6 @@ type Block = {
   list?: string[];
 };
 
-// Ported from scam-alerts.php `.crypto-spams` (`.editor-content`). Two small
-// content fixes made while porting: (1) the source repeated the "Different
-// tactics can be used..." paragraph twice verbatim under "How can I spot an
-// investment scam?" — deduped here; (2) "Benifits" typo corrected to
-// "Benefits". Everything else is copied as-is.
 const blocks: Block[] = [
   {
     heading: "Introduction",
@@ -127,9 +122,6 @@ const blocks: Block[] = [
   },
 ];
 
-// Now rendered inside a Dialog (see scam-alerts-section.tsx) rather than
-// inline in the page — the full article was a lot of scroll real estate
-// for a page that's supposed to be a single continuous scroll experience.
 export function ScamArticle() {
   return (
     <div>

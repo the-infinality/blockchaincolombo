@@ -2,20 +2,8 @@
 
 import * as React from "react";
 
-// Fast start, gentle landing — reads as "counting up" rather than a linear tick.
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
-/**
- * Replaces the jQuery `.count` prop-animate used in footer.php's inline
- * script (`$('.count').animate({ Counter: $(this).text() }, ...)`).
- *
- * Counts up from 0 to `value` each time the number scrolls fully into
- * view: it waits for the element to be on screen (and a short `delay`, so
- * the surrounding section's reveal has settled and the count is actually
- * seen), eases out over `duration`, and resets to 0 once it has left the
- * viewport so it replays on the next visit. Reduced-motion users just see
- * the final value.
- */
 export function StatCounter({
   value,
   duration = 2200,
@@ -65,7 +53,6 @@ export function StatCounter({
         if (entry.intersectionRatio >= 0.9 && !running) {
           run();
         } else if (!entry.isIntersecting && !reduceMotion) {
-          // Fully off screen: reset so it counts up again next time.
           stop();
           setDisplay(0);
         }

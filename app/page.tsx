@@ -11,17 +11,8 @@ import { ScamAlertsSection } from "@/components/page-sections/scam-alerts-sectio
 import { BlogSection } from "@/components/page-sections/blog-section";
 import { ContactUsSection } from "@/components/page-sections/contact-us-section";
 
-// Every major section below now carries its own standardized top/bottom
-// padding (see each component), so this just alternates between the
-// ambient <SiteBackground> showing through (transparent) and a solid
-// brand-navy-deep panel — a simple rhythm of flat color blocks marking
-// each topic change (consensys.io-style) instead of one continuous scroll.
 const BAND = "bg-brand-navy-deep";
 
-// Single-page site: every item in the main nav (lib/nav.ts) is an in-page
-// anchor to one of these <section id="..."> blocks. Nav lives permanently
-// in components/site-header.tsx; <HeroSequence> is just the short intro
-// moment at the top of the page (see components/hero-sequence.tsx).
 export default function Home() {
   return (
     <>

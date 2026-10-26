@@ -4,11 +4,6 @@ import { RevealGroup, RevealItem } from "@/components/motion/reveal";
 
 const LABEL = "font-mono text-[11px] tracking-widest uppercase";
 
-// Tech-editorial closing section on the site's own particle background:
-// an oversized two-line display title ("Stay in" in #796753, "The current"
-// in white), then a four-column row — intro copy, the contact prompt, and
-// the two enquiry forms side by side.
-// Columns collapse to two below xl and to one on small screens.
 export function ContactUsSection() {
   return (
     <section

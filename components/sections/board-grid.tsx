@@ -11,18 +11,6 @@ export type BoardMember = {
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-// Staggered "offset brick" directory of board members: on wide screens a
-// 6-column track with three cards (2 columns each) on top and two below,
-// shifted in by one column so they sit centred under the seams. Two
-// columns on tablets (the last card spans both) and one on phones.
-//
-// Every card draws its own four #796753 hairlines as the grid scrolls into
-// view — neighbouring edges overlap exactly, so it reads as one thin grid
-// whatever the arrangement. Each cell carries a small mono index top-left,
-// the name at the same fixed offset in every card (so names line up across
-// a row), and the role bottom-left with social links bottom-right.
-
-// Placement per card index on the 6-column (xl) track.
 const XL_PLACEMENT = [
   "xl:col-span-2",
   "xl:col-span-2",

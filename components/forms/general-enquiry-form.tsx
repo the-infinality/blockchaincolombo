@@ -25,13 +25,10 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-// Thin #796753-outlined fields to match the contact section's
-// tech-editorial styling.
 const FIELD =
   "h-9 rounded-sm border-[#796753] bg-transparent text-white placeholder:text-white/45 focus-visible:border-white focus-visible:ring-0 dark:bg-transparent";
 const SUBMIT =
   "rounded-sm bg-[#796753] px-5 text-[#050b1c] hover:bg-[#796753]/80";
-
 
 export function GeneralEnquiryForm() {
   const [status, setStatus] = React.useState<"idle" | "success" | "error">(

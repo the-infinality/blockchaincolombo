@@ -5,18 +5,6 @@ import { motion, useReducedMotion, type Variants } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 
-/**
- * Self-drawing grid rules. A <LineGrid> container starts the drawing once
- * it scrolls into view (once); each <GridLine> inside it — a 1px absolutely
- * positioned bar standing in for a CSS border — then grows from 0 to full
- * length: horizontal rules sweep left→right, vertical rules drop top→down.
- * Pass a `delay` per line to choreograph the sequence.
- *
- * Variant names match components/motion/reveal.tsx ("hidden"/"visible"),
- * so any RevealItem nested inside a LineGrid still animates normally.
- * Only `transform: scale` animates (compositor-only, no layout shift).
- */
-
 const DRAW = { duration: 1.1, ease: [0.65, 0, 0.35, 1] } as const;
 
 export function LineGrid({ className, ...props }: React.ComponentProps<typeof motion.div>) {
@@ -31,7 +19,6 @@ export function LineGrid({ className, ...props }: React.ComponentProps<typeof mo
   );
 }
 
-/** Same as LineGrid but renders an <ol> (for numbered, ruled lists). */
 export function LineList({ className, ...props }: React.ComponentProps<typeof motion.ol>) {
   return (
     <motion.ol
@@ -49,10 +36,8 @@ export function GridLine({
   delay = 0,
   className,
 }: {
-  /** "x" = horizontal rule, "y" = vertical rule. */
   axis?: "x" | "y";
   delay?: number;
-  /** Position (e.g. "top-0", "right-0") and color (e.g. "bg-white"). */
   className?: string;
 }) {
   const shouldReduceMotion = useReducedMotion();

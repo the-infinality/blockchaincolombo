@@ -4,9 +4,6 @@ import * as React from "react";
 
 import { pointer } from "@/lib/pointer";
 
-// How close the cursor has to be to push a particle away, and how hard —
-// tapers to 0 at the radius edge so it reads as a soft "dent" rather than
-// a hard collision.
 const DENT_RADIUS = 150;
 const DENT_STRENGTH = 10;
 
@@ -27,7 +24,6 @@ type Particle = {
   twinklePhase: number;
   twinkleSpeed: number;
   sprite: HTMLCanvasElement;
-  /** Half the sprite's drawn size, so it can be centred on (x, y). */
   half: number;
 };
 
@@ -35,12 +31,6 @@ function randomBetween(min: number, max: number) {
   return Math.random() * (max - min) + min;
 }
 
-/**
- * Pre-renders one glowing dot (core + blur halo) to a small offscreen
- * canvas. Drawing these with drawImage each frame replaces per-particle
- * `shadowBlur`, which forced the browser to compute a fresh Gaussian blur
- * for every particle on every frame and was the main source of scroll lag.
- */
 function makeSprite(color: string, radius: number, glow: number, dpr: number) {
   const size = Math.ceil((radius + glow) * 2 + 2);
   const canvas = document.createElement("canvas");
@@ -75,15 +65,6 @@ function createParticle(width: number, height: number, dpr: number): Particle {
   };
 }
 
-/**
- * The twinkling, drifting, cursor-dented glow-particle field used by the
- * permanent full-page backdrop (components/site-background.tsx). Sized off
- * the window, since it sits in a fixed full-viewport layer.
- *
- * Performance: glows are pre-rendered sprites (no per-frame blur), the
- * loop pauses while the tab is hidden, and device pixel ratio is capped at
- * 1.5 — plenty for soft dots, and far fewer pixels to clear each frame.
- */
 export function ParticleField({ className = "absolute inset-0" }: { className?: string }) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
@@ -114,8 +95,6 @@ export function ParticleField({ className = "absolute inset-0" }: { className?: 
     function resize() {
       const nextWidth = window.innerWidth;
       const nextHeight = window.innerHeight;
-      // Mobile browsers fire resize when the URL bar shows/hides (height
-      // only); don't reseed the whole field for that.
       const widthChanged = nextWidth !== width;
       width = nextWidth;
       height = nextHeight;
@@ -147,7 +126,6 @@ export function ParticleField({ className = "absolute inset-0" }: { className?: 
 
         const dx = p.x - pointer.x;
         const dy = p.y - pointer.y;
-        // Cheap squared-distance reject before the sqrt.
         const distSq = dx * dx + dy * dy;
         if (distSq < DENT_RADIUS * DENT_RADIUS && distSq > 0.0001) {
           const dist = Math.sqrt(distSq);

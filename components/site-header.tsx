@@ -20,25 +20,14 @@ import {
   subscribeHeroIntro,
 } from "@/lib/hero-intro-store";
 
-// Fixed top nav in the footer's tech-editorial style: bold wordmark, small
-// mono uppercase links, and an outlined CTA box with an attached arrow
-// cell. Transparent over the hero; once scrolled, a solid navy bar with a
-// thin white rule (no backdrop blur, which re-renders every frame over the
-// animated particle background).
 const SCROLL_THRESHOLD = 40;
 
-// mainNav includes "Contact Us" for the footer's full link list, but the
-// header already has a dedicated headerCta button for that — render the
-// rest of the links here and skip the duplicate.
 const navLinks = mainNav.filter((item) => item.href !== headerCta.href);
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const shouldReduceMotion = useReducedMotion();
-  // Stays hidden until components/hero-sequence.tsx's staged load sequence
-  // reaches its final "reveal" phase, so the nav fades in together with
-  // the hero background rather than being visible from the first frame.
   const introComplete = React.useSyncExternalStore(
     subscribeHeroIntro,
     getHeroIntroSnapshot,

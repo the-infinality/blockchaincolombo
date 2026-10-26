@@ -22,12 +22,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// The old <select> options in contact-us.php were literal placeholders
-// ("Membership Category 1", "State 1", ...) with no real values behind
-// them. Replaced here with the real membership tiers (membership-types.php)
-// and Sri Lankan provinces — the original "State" field was a leftover
-// from the Australian template this theme was cloned from (see
-// PROJECT-README.md). Confirm the exact category/province list with the client.
 const membershipCategories = [
   "Professional Membership",
   "Startup and SME Membership",
@@ -77,13 +71,10 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-// Thin #796753-outlined fields to match the contact section's
-// tech-editorial styling.
 const FIELD =
   "h-9 rounded-sm border-[#796753] bg-transparent text-white placeholder:text-white/45 focus-visible:border-white focus-visible:ring-0 dark:bg-transparent";
 const SUBMIT =
   "rounded-sm bg-[#796753] px-5 text-[#050b1c] hover:bg-[#796753]/80";
-
 
 export function MembershipEnquiryForm() {
   const [status, setStatus] = React.useState<"idle" | "success" | "error">(

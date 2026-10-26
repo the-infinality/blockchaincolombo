@@ -7,12 +7,6 @@ import { PointerTracker } from "@/components/pointer-tracker";
 import { SiteBackground } from "@/components/site-background";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 
-// One type family, site-wide: General Sans (via Fontshare), used for both
-// headings and body — a clean geometric sans matching the visual character
-// of consensys.io (their actual Atyp Display/Text faces are proprietary).
-// Google Sans / Great Vibes have been dropped entirely. Loaded via a plain
-// <link> rather than next/font/google, since this isn't a Google Fonts
-// family.
 export const metadata: Metadata = {
   title: "Blockchain Colombo",
   description:

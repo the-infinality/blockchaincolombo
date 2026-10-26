@@ -8,10 +8,6 @@ const stats = [
   { value: 14, suffix: "", label: "Cities" },
 ];
 
-// Plain-panel editorial layout (no background image): an oversized
-// three-line cream headline, a lead line and body copy in white, then a
-// ruled stats row — three large #796753 counters separated by thin
-// vertical dividers. Stats stack below sm.
 export function PurposeOfCommunity() {
   return (
     <section className="mx-auto max-w-[96rem] px-4 py-20 sm:px-8 sm:py-32 lg:px-12">

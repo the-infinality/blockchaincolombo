@@ -11,10 +11,6 @@ type Tier = {
   cta: { label: string; href: string };
 };
 
-// Ported from membership-types.php. Note: the source literally read
-// "Blockchain Australia" in the intro paragraph — an uncorrected leftover
-// from the template this theme was cloned from (see PROJECT-README.md
-// §3.2). Corrected to "Blockchain Colombo" here; flag with the client.
 const tiers: Tier[] = [
   {
     price: "LKR 2,000",
@@ -61,11 +57,6 @@ const tiers: Tier[] = [
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-// Solid deep-navy panel: heading/subheading/intro on the left, and the
-// three tiers as a hairline-bordered #796753 grid on the right. Each tier
-// has a mono index/price header row, an oversized title, its benefit list,
-// and a ruled CTA row pinned to the bottom. Header stacks above the grid
-// below xl; tiers stack to one column below md.
 export function MembershipTypesSection() {
   return (
     <section id="membership-types" className="scroll-mt-16 bg-brand-navy-deep text-white">

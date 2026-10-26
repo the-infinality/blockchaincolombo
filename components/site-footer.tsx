@@ -9,10 +9,6 @@ const contact = {
 
 const LABEL = "font-mono text-[11px] tracking-widest uppercase text-white/70";
 
-// Tech-editorial footer on the site's own particle background, all in
-// white: a large invitation line up top, then a
-// ruled four-column strip — info, navigation (two sub-columns), contact
-// details and the email-only newsletter signup — in small mono type.
 export function SiteFooter() {
   return (
     <footer id="site-footer" className="mt-auto text-white">

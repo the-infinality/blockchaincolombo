@@ -31,14 +31,8 @@ const whatWeDoIntro = [
   "Blockchain Colombo aims to be the beating heart of industry bringing business, academia, and government under one roof.",
 ];
 
-// Shared display size for both oversized headings.
 const DISPLAY = "font-heading text-[clamp(2.5rem,5.5vw,5.25rem)] leading-[0.92] font-bold tracking-tight uppercase";
 
-// Editorial layout on the section's own ambient particle backdrop: the
-// three-line headline on the left with the intro paragraph opposite it on
-// the right (bottom-aligned to the headline), then a centered "What we do"
-// heading with its intro paragraphs, and the three numbered pillars as
-// full-width columns underneath. Stacks to a single column below lg.
 export function WhatWeDo() {
   return (
     <section className="relative mx-auto max-w-[96rem] px-4 py-20 sm:px-8 sm:py-32 lg:px-12">

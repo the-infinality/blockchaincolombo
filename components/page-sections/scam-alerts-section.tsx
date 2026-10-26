@@ -13,17 +13,6 @@ import { RevealGroup, RevealItem } from "@/components/motion/reveal";
 
 const CREAM = "text-[#f5efe6]";
 
-// Split layout on the site's own particle background: oversized title,
-// subheading and a ruled label on the left; on the right, a member notice
-// (with an exclamation box), intro copy, and the two report blocks
-// separated by hairlines, ending in the report CTA.
-//
-// The report content was ported from scam-alerts.php `.report-scam`. Source
-// repeated the identical "Report a scam to the ACCC" block 4 times, unedited
-// from the Australian template this theme was cloned from (ACCC =
-// Australia's consumer watchdog, not a Sri Lankan body). Reduced to the one
-// real callout; needs the real Sri Lankan reporting channel (e.g. CBSL,
-// CERT|CC, Police CID) and its URL from the client before this ships.
 export function ScamAlertsSection() {
   return (
     <section
@@ -47,8 +36,6 @@ export function ScamAlertsSection() {
         <RevealItem>
           <div className="mt-8 max-w-xs border-t border-[#796753] pt-3 font-mono text-[11px] tracking-widest text-[#796753] uppercase">
             <p>Official channels and practical guidance</p>
-            {/* The full guide opens in a dialog instead of taking up a huge
-                scroll of the page itself. */}
             <Dialog>
               <DialogTrigger className={`mt-3 inline-flex items-center gap-2 uppercase transition-opacity hover:opacity-70 ${CREAM}`}>
                 Read: Cryptocurrency scams
@@ -100,6 +87,9 @@ export function ScamAlertsSection() {
 
         <RevealItem className="mt-6">
           <h3 className="border-b border-[#796753] pb-3 font-heading text-3xl text-[#796753] sm:text-4xl">
+            {/* Before going live: ACCC is Australia's regulator (left over from the
+                original template). Replace it, and this button's "#" link, with
+                the Sri Lankan reporting channel. */}
             Report a scam to the ACCC
           </h3>
         </RevealItem>
