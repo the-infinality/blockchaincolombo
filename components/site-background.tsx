@@ -21,9 +21,11 @@ export function SiteBackground() {
       {/* Glowing, twinkling particles of varying sizes */}
       <ParticleField />
 
-      {/* Subtle grain so the gradient doesn't read as flat/digital */}
+      {/* Subtle grain so the gradient doesn't read as flat/digital. Plain
+          low opacity, not mix-blend-mode: a blend on a fixed full-screen
+          layer over the animated canvas has to be recomputed every frame. */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.04] mix-blend-overlay"
+        className="pointer-events-none absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage:
             "url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22120%22%20height=%22120%22%3E%3Cfilter%20id=%22n%22%3E%3CfeTurbulence%20type=%22fractalNoise%22%20baseFrequency=%220.9%22%20numOctaves=%222%22%20stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect%20width=%22100%25%22%20height=%22100%25%22%20filter=%22url(%23n)%22/%3E%3C/svg%3E')",

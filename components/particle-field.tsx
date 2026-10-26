@@ -22,44 +22,67 @@ const PARTICLE_COLORS = [
 type Particle = {
   x: number;
   y: number;
-  radius: number;
   speed: number;
   drift: number;
   twinklePhase: number;
   twinkleSpeed: number;
-  color: string;
-  glow: number;
+  sprite: HTMLCanvasElement;
+  /** Half the sprite's drawn size, so it can be centred on (x, y). */
+  half: number;
 };
 
 function randomBetween(min: number, max: number) {
   return Math.random() * (max - min) + min;
 }
 
-function createParticle(width: number, height: number): Particle {
+/**
+ * Pre-renders one glowing dot (core + blur halo) to a small offscreen
+ * canvas. Drawing these with drawImage each frame replaces per-particle
+ * `shadowBlur`, which forced the browser to compute a fresh Gaussian blur
+ * for every particle on every frame and was the main source of scroll lag.
+ */
+function makeSprite(color: string, radius: number, glow: number, dpr: number) {
+  const size = Math.ceil((radius + glow) * 2 + 2);
+  const canvas = document.createElement("canvas");
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  const ctx = canvas.getContext("2d")!;
+  ctx.scale(dpr, dpr);
+  ctx.shadowColor = color;
+  ctx.shadowBlur = glow;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(size / 2, size / 2, radius, 0, Math.PI * 2);
+  ctx.fill();
+  return canvas;
+}
+
+function createParticle(width: number, height: number, dpr: number): Particle {
   const isBright = Math.random() > 0.93;
+  const radius = isBright ? randomBetween(1.8, 3.2) : randomBetween(0.4, 1.4);
+  const glow = isBright ? randomBetween(8, 16) : randomBetween(2, 6);
+  const color = PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)];
+  const sprite = makeSprite(color, radius, glow, dpr);
   return {
     x: Math.random() * width,
     y: Math.random() * height,
-    radius: isBright ? randomBetween(1.8, 3.2) : randomBetween(0.4, 1.4),
     speed: randomBetween(0.03, 0.18),
     drift: randomBetween(-0.05, 0.05),
     twinklePhase: Math.random() * Math.PI * 2,
     twinkleSpeed: randomBetween(0.006, 0.026),
-    color: PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)],
-    glow: isBright ? randomBetween(8, 16) : randomBetween(2, 6),
+    sprite,
+    half: sprite.width / dpr / 2,
   };
 }
 
 /**
- * Just the twinkling, drifting, cursor-dented glow-particle field — no
- * background gradient or arcs. components/site-background.tsx uses this
- * for the permanent full-page backdrop; it's also dropped in directly as
- * a layer on top of specific images (see who-we-are-section.tsx) when a
- * section wants that same particle texture sitting over its own artwork.
- * Sized off the window's own dimensions (not the canvas element's own
- * measured box) — every current usage is a full-viewport-height section,
- * and this sidesteps any getBoundingClientRect/ResizeObserver timing
- * quirks around initial layout.
+ * The twinkling, drifting, cursor-dented glow-particle field used by the
+ * permanent full-page backdrop (components/site-background.tsx). Sized off
+ * the window, since it sits in a fixed full-viewport layer.
+ *
+ * Performance: glows are pre-rendered sprites (no per-frame blur), the
+ * loop pauses while the tab is hidden, and device pixel ratio is capped at
+ * 1.5 — plenty for soft dots, and far fewer pixels to clear each frame.
  */
 export function ParticleField({ className = "absolute inset-0" }: { className?: string }) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -67,44 +90,46 @@ export function ParticleField({ className = "absolute inset-0" }: { className?: 
   React.useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     let particles: Particle[] = [];
     let rafId = 0;
-    let width = window.innerWidth;
-    let height = window.innerHeight;
+    let width = 0;
+    let height = 0;
+
+    function draw(p: Particle, alpha: number) {
+      ctx!.globalAlpha = alpha;
+      ctx!.drawImage(p.sprite, p.x - p.half, p.y - p.half, p.half * 2, p.half * 2);
+    }
+
+    function paintStatic() {
+      ctx!.clearRect(0, 0, width, height);
+      for (const p of particles) draw(p, 0.55);
+      ctx!.globalAlpha = 1;
+    }
 
     function resize() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas!.width = width * dpr;
-      canvas!.height = height * dpr;
+      const nextWidth = window.innerWidth;
+      const nextHeight = window.innerHeight;
+      // Mobile browsers fire resize when the URL bar shows/hides (height
+      // only); don't reseed the whole field for that.
+      const widthChanged = nextWidth !== width;
+      width = nextWidth;
+      height = nextHeight;
+      canvas!.width = Math.round(width * dpr);
+      canvas!.height = Math.round(height * dpr);
       canvas!.style.width = `${width}px`;
       canvas!.style.height = `${height}px`;
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.min(Math.round((width * height) / 11000), 130);
-      particles = Array.from({ length: count }, () => createParticle(width, height));
-    }
-    resize();
-    window.addEventListener("resize", resize);
-
-    function paintStatic() {
-      ctx!.clearRect(0, 0, width, height);
-      for (const p of particles) {
-        ctx!.beginPath();
-        ctx!.shadowColor = p.color;
-        ctx!.shadowBlur = p.glow;
-        ctx!.fillStyle = p.color;
-        ctx!.globalAlpha = 0.55;
-        ctx!.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx!.fill();
+      if (widthChanged || particles.length === 0) {
+        const count = Math.min(Math.round((width * height) / 11000), 130);
+        particles = Array.from({ length: count }, () => createParticle(width, height, dpr));
       }
-      ctx!.globalAlpha = 1;
-      ctx!.shadowBlur = 0;
+      if (reduceMotion) paintStatic();
     }
 
     function frame() {
@@ -122,38 +147,44 @@ export function ParticleField({ className = "absolute inset-0" }: { className?: 
 
         const dx = p.x - pointer.x;
         const dy = p.y - pointer.y;
-        const dist = Math.hypot(dx, dy);
-        if (dist < DENT_RADIUS && dist > 0.01) {
+        // Cheap squared-distance reject before the sqrt.
+        const distSq = dx * dx + dy * dy;
+        if (distSq < DENT_RADIUS * DENT_RADIUS && distSq > 0.0001) {
+          const dist = Math.sqrt(distSq);
           const force = (1 - dist / DENT_RADIUS) * DENT_STRENGTH;
           p.x += (dx / dist) * force;
           p.y += (dy / dist) * force;
         }
 
         const twinkle = (Math.sin(p.twinklePhase) + 1) / 2;
-        const alpha = 0.25 + twinkle * 0.7;
-
-        ctx!.beginPath();
-        ctx!.shadowColor = p.color;
-        ctx!.shadowBlur = p.glow * (0.6 + twinkle * 0.6);
-        ctx!.fillStyle = p.color;
-        ctx!.globalAlpha = Math.min(alpha, 1);
-        ctx!.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx!.fill();
+        draw(p, Math.min(0.25 + twinkle * 0.7, 1));
       }
       ctx!.globalAlpha = 1;
-      ctx!.shadowBlur = 0;
       rafId = requestAnimationFrame(frame);
     }
 
-    if (reduceMotion) {
-      paintStatic();
-    } else {
+    function start() {
+      if (reduceMotion || rafId) return;
       rafId = requestAnimationFrame(frame);
     }
+    function stop() {
+      cancelAnimationFrame(rafId);
+      rafId = 0;
+    }
+    function onVisibility() {
+      if (document.hidden) stop();
+      else start();
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+    document.addEventListener("visibilitychange", onVisibility);
+    start();
 
     return () => {
       window.removeEventListener("resize", resize);
-      cancelAnimationFrame(rafId);
+      document.removeEventListener("visibilitychange", onVisibility);
+      stop();
     };
   }, []);
 

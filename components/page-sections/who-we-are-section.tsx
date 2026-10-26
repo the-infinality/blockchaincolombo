@@ -1,20 +1,20 @@
 import { RevealGroup, RevealItem } from "@/components/motion/reveal";
 import { BoardGrid, type BoardMember } from "@/components/sections/board-grid";
 
-// Real board members from who-we-are.php's `.meet-our-team` and the
-// untitled `.meet-our-team-2` grid (Andrew Power entries were
-// HTML-commented out in the original and are intentionally dropped here).
-// Only the social links that exist in source are rendered.
+// Board members, in display order (numbered 01–05 in the grid). Social
+// icons render only for links that exist — Ornella has no X account.
 const board: BoardMember[] = [
   {
     name: "Daks Gunaratne",
     position: "Chairman",
+    linkedin: "https://www.linkedin.com/in/daksg/",
+    twitter: "https://x.com/Daks_Gunaratne?s=20",
   },
   {
     name: "Chas Gunaratne",
     position: "Board Director",
     linkedin: "https://www.linkedin.com/in/chas-gunaratne/",
-    twitter: "https://twitter.com/ChasGunaratne",
+    twitter: "https://x.com/ChasGunaratne?s=20",
   },
   {
     name: "Ornella Da Costa",
@@ -26,7 +26,13 @@ const board: BoardMember[] = [
     name: "Josh Mapperson",
     position: "Head of Communications and Ecosystem Development, RockX.",
     linkedin: "https://www.linkedin.com/in/joshua-m-a321b5160/",
-    twitter: "https://twitter.com/Gandalf_NFT",
+    twitter: "https://x.com/Gandalf_NFT",
+  },
+  {
+    name: "Lineli Wijesinghe",
+    position: "Community Lead",
+    linkedin: "https://www.linkedin.com/in/lineli-w/",
+    twitter: "https://x.com/andyyy_lw",
   },
 ];
 
@@ -34,14 +40,14 @@ export function WhoWeAreSection() {
   return (
     <section id="who-we-are" className="scroll-mt-16">
       {/* Board: transparent so the site's particle background shows
-          through. Intro copy on the left, 2x2 member grid on the right. */}
-      <div className="mx-auto grid max-w-[96rem] gap-12 px-4 py-20 sm:px-8 sm:py-32 lg:grid-cols-2 lg:gap-16 lg:px-12">
+          through. Intro copy on the left, 3-over-2 member grid on the right. */}
+      <div className="mx-auto grid max-w-[96rem] gap-12 px-4 py-20 sm:px-8 sm:py-32 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] lg:gap-16 lg:px-12">
         <RevealGroup>
           <RevealItem>
             <p className="font-mono text-[11px] tracking-widest text-[#796753] uppercase">
               Our Board
             </p>
-            <h2 className="mt-6 font-heading text-[clamp(3rem,7vw,6.5rem)] leading-[0.9] font-bold tracking-tight text-[#796753] uppercase">
+            <h2 className="mt-6 font-heading text-[clamp(3rem,5.5vw,6.5rem)] leading-[0.9] font-bold tracking-tight text-[#796753] uppercase">
               Our Board
             </h2>
           </RevealItem>

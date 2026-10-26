@@ -1,7 +1,6 @@
 import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { ParticleField } from "@/components/particle-field";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal";
 import { progressiveDelay } from "@/lib/scroll-stagger";
 
@@ -43,8 +42,6 @@ const DISPLAY = "font-heading text-[clamp(2.5rem,5.5vw,5.25rem)] leading-[0.92] 
 export function WhatWeDo() {
   return (
     <section className="relative mx-auto max-w-[96rem] px-4 py-20 sm:px-8 sm:py-32 lg:px-12">
-      <ParticleField className="absolute inset-0" />
-
       <RevealGroup className="relative grid gap-8 lg:grid-cols-2 lg:items-end lg:gap-x-6">
         <RevealItem>
           <h2 className={DISPLAY}>

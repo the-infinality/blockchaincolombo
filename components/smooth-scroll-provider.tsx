@@ -29,7 +29,7 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
       // A slow, decelerating ease-out (cubic) over a longer-than-native
       // duration is what gives the scroll its "heavy, modern" feel rather
       // than the browser's stepwise native scroll.
-      duration: 1.5,
+      duration: 1.15,
       easing: (t: number) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
     });
